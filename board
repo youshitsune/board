@@ -1,0 +1,45 @@
+#!/usr/bin/python3 -I
+
+import os
+import sys
+
+path = "/home/youshitsune/board/drawing_board"
+
+def draw():
+    print()
+    print("NOTE: FILE SIZE IS LIMITED TO 2000 CHARS!!!")
+    print()
+    editor = input("What editor do you want to use [vim/emacs/nano]: ")
+    if editor not in ["vim", "emacs", "nano"]:
+        draw()
+    else:
+        os.system(f"{editor} {path}")
+        with open(path, "r") as f:
+            ctx = f.read()
+        if len(ctx) > 2000:
+            with open(path, "w") as f:
+                f.write("".join(ctx[0:2000]))
+
+def view():
+    with open(path, "r") as f:
+        ctx = f.read().rstrip("\n")
+    ctx = list(ctx)
+    if len(ctx) < 2000:
+        for i in range(2000-len(ctx)):
+            ctx.append(" ")
+    print("-"*104)
+    for i in range(0, 2000, 100):
+        print("| ", end="")
+        print("".join(ctx[i:i+100]),end="")
+        print(" |")
+    print("-"*104)
+if __name__ == "__main__":
+    if len(sys.argv) == 1 or sys.argv[1] not in ["draw", "view"] or sys.argv[1] == "help" or sys.argv[1] == "--help":
+        print("Help:")
+        print("\t- draw > Opens board")
+        print("\t- view > View board")
+    elif sys.argv[1] == "draw":
+        draw()
+    elif sys.argv[1] == "view":
+        view()
+
